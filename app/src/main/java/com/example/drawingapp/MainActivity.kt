@@ -84,6 +84,12 @@ class MainActivity : AppCompatActivity() {
             requestStoragePermission()
         }
 
+        val ib_undo: ImageButton = findViewById(R.id.ib_undo)
+        ib_undo.setOnClickListener {
+            drawingView?.onClickUndo()
+        }
+
+
     }
 
 

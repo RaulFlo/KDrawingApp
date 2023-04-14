@@ -102,16 +102,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_paint_colors" >
+        app:layout_constraintTop_toBottomOf="@id/ll_paint_colors">
 
         <ImageButton
-           android:id="@+id/ib_gallery"
+            android:id="@+id/ib_gallery"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/gallery"
-             />
+            android:src="@drawable/gallery" />
+
+        <ImageButton
+            android:id="@+id/ib_undo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_undo" />
 
 
         <ImageButton
@@ -120,11 +127,8 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_brush"
-             />
+            android:src="@drawable/ic_brush" />
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
