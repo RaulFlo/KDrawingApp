@@ -2,7 +2,6 @@ package com.example.drawingapp
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,13 +14,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.provider.MediaStore
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -87,8 +90,8 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getDrawable(this, R.drawable.pallet_pressed)
         )
 
-        val ib_brush: ImageButton = findViewById(R.id.ib_brush)
-        ib_brush.setOnClickListener {
+        val ibBrush: ImageButton = findViewById(R.id.ib_brush)
+        ibBrush.setOnClickListener {
             showBrushSizeChooserDialog()
         }
 
@@ -97,9 +100,22 @@ class MainActivity : AppCompatActivity() {
             requestStoragePermission()
         }
 
-        val ib_undo: ImageButton = findViewById(R.id.ib_undo)
-        ib_undo.setOnClickListener {
+        val ibUndo: ImageButton = findViewById(R.id.ib_undo)
+        ibUndo.setOnClickListener {
             drawingView?.onClickUndo()
+        }
+
+        val ibSave: ImageButton = findViewById(R.id.ib_save)
+        ibSave.setOnClickListener {
+
+            if(isReadStorageAllowed()){
+                lifecycleScope.launch {
+                    val flDrawingView: FrameLayout = findViewById(R.id.fl_drawing_view_container)
+
+                    saveBitmapFile(getBitmapFromView(flDrawingView))
+                }
+            }
+
         }
 
 
@@ -150,6 +166,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun isReadStorageAllowed(): Boolean{
+        val result = ContextCompat.checkSelfPermission(this,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
+
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun requestStoragePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
@@ -163,8 +186,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestPermission.launch(
                 arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                    //TODO - ADD WRITING EXTERNAL STORAGE PERMISSION
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
 
                 )
             )
